@@ -4,6 +4,7 @@ import argparse
 import sys
 import markdown
 
+
 def convert_markdown_to_html(input_file: str, output_file: str) -> None:
     """
     Convert Markdown file to HTML file.
@@ -34,7 +35,7 @@ def convert_markdown_to_html(input_file: str, output_file: str) -> None:
 
 def main() -> None:
     # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Convert Markdown file to HTML file")
+    parser = argparse.ArgumentParser(description="Convert Markdown to HTML")
     parser.add_argument("input_file", help="Name of the Markdown file")
     parser.add_argument("output_file", help="Name of the output HTML file")
     args = parser.parse_args()
