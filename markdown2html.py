@@ -1,48 +1,43 @@
-#!/usr/bin/env python3
-
-import argparse
+#!/usr/bin/python3
+'''
+A script that codes markdown to HTML
+'''
 import sys
-import markdown
+import os
+import re
 
+if __name__ == '__main__':
 
-def convert_markdown_to_html(input_file: str, output_file: str) -> None:
-    """
-    Convert Markdown file to HTML file.
-
-    Args:
-        input_file (str): Name of the Markdown file.
-        output_file (str): Name of the output HTML file.
-
-    Raises:
-        FileNotFoundError: If the Markdown file doesn't exist.
-    """
-    try:
-        # Read Markdown content
-        with open(input_file, 'r') as md_file:
-            markdown_content = md_file.read()
-
-        # Convert Markdown to HTML
-        html_content = markdown.markdown(markdown_content)
-
-        # Write HTML content to output file
-        with open(output_file, 'w') as html_file:
-            html_file.write(html_content)
-    except FileNotFoundError:
-        # Print error message if Markdown file doesn't exist
-        sys.stderr.write(f"Missing {input_file}\n")
+    # Test that the number of arguments passed is 2
+    if len(sys.argv[1:]) != 2:
+        print('Usage: ./markdown2html.py README.md README.html',
+              file=sys.stderr)
         sys.exit(1)
 
+    # Store the arguments into variables
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
-def main() -> None:
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Convert Markdown to HTML")
-    parser.add_argument("input_file", help="Name of the Markdown file")
-    parser.add_argument("output_file", help="Name of the output HTML file")
-    args = parser.parse_args()
+    # Checks that the markdown file exists and is a file
+    if not (os.path.exists(input_file) and os.path.isfile(input_file)):
+        print(f'Missing {input_file}', file=sys.stderr)
+        sys.exit(1)
 
-    # Convert Markdown to HTML
-    convert_markdown_to_html(args.input_file, args.output_file)
+    with open(input_file, encoding='utf-8') as file_1:
+        html_content = []
+        md_content = [line[:-1] for line in file_1.readlines()]
+        for line in md_content:
+            heading = re.split(r'#{1,6} ', line)
+            if len(heading) > 1:
+                # Compute the number of the # present to
+                # determine heading level
+                h_level = len(line[:line.find(heading[1])-1])
+                # Append the html equivalent of the heading
+                html_content.append(
+                    f'<h{h_level}>{heading[1]}</h{h_level}>\n'
+                )
+            else:
+                html_content.append(line)
 
-
-if __name__ == "__main__":
-    main()
+    with open(output_file, 'w', encoding='utf-8') as file_2:
+        file_2.writelines(html_content)
