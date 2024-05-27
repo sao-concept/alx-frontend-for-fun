@@ -1,0 +1,9 @@
+/* Sass file */
+$color-0: #ff0000;
+$color-1: #00ff00;
+button {
+  color: $color-0;
+  &:hover {
+    color: $color-1;
+  }
+}
