@@ -1,0 +1,7 @@
+/* doing more nested declarations with attribute selectors */
+body {
+  color: #3d3d3d;
+  > .red {
+    color: #ff0000;
+  }
+}
